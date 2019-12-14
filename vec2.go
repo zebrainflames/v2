@@ -57,11 +57,52 @@ func (v *Vec2) MulS(o float64) {
 	v.Y *= o
 }
 
-func (v *Vec2) Sub(o Vec2) {
+func (v *Vec2) Sub(i interface{}) {
+	switch o := i.(type) {
+	case Vec2:
+		v.SubV(o)
+	case int:
+		v.SubS(float64(o))
+	case float32:
+		v.SubS(float64(o))
+	default:
+		panic("Incompatible type!")
+	}
+}
+
+func (v *Vec2) SubV(o Vec2) {
 	v.X -= o.X
 	v.Y -= o.Y
 }
 
+func (v *Vec2) SubS(o float64) {
+	v.X -= o
+	v.Y -= o
+}
+
+func (v *Vec2) Div(i interface{}) {
+	switch o := i.(type) {
+	case Vec2:
+		v.DivV(o)
+	case int:
+		v.DivS(float64(o))
+	case float32:
+		v.DivS(float64(o))
+	default:
+		panic("Incompatible type!")
+	}
+}
+
+func (v *Vec2) DivV(o Vec2) {
+	v.X *= o.X
+	v.Y *= o.Y
+}
+
+
+func (v *Vec2) DivS(o float64) {
+	v.X *= o
+	v.Y *= o
+}
 
 func (v *Vec2) Project(o Vec2) {
 	dot := v.Dot(o)
@@ -97,13 +138,28 @@ func (v Vec2) Normalized() Vec2 {
 	return Scale(v, 1.0/v.Length())
 }
 
-func Add(v, u Vec2) Vec2 {
-	return Vec2{v.X + u.X, v.Y + u.Y}
+func Add(v, o Vec2) Vec2 {
+	return Vec2{v.X + o.X, v.Y + o.Y}
 }
 
-func Sub(v, u Vec2) Vec2 {
-	return Vec2{v.X - u.X, v.Y - u.Y}
+func Sub(v, o Vec2) Vec2 {
+	return Vec2{v.X - o.X, v.Y - o.Y}
 }
+
+func Div(v, o Vec2) Vec2 {
+	return Vec2{
+		X: v.X / o.X,
+		Y: v.Y / o.Y,
+	}
+}
+
+func Mul(v, o Vec2) Vec2 {
+	return Vec2{
+		X: v.X * o.X,
+		Y: v.Y * o.Y,
+	}
+}
+
 
 func Scale(v Vec2, r float64) Vec2 {
 	return Vec2{v.X * r, v.Y * r}
