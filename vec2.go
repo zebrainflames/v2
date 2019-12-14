@@ -1,6 +1,8 @@
 package v2
 
-import "math"
+import (
+	"math"
+)
 
 // Vec2 is a 2D Vec2 type
 type Vec2 struct {
@@ -18,9 +20,34 @@ func (v *Vec2) Sub(o Vec2) {
 	v.Y -= o.Y
 }
 
-func (v *Vec2) Mul(o float64) {
+func (v *Vec2) Mul(i interface{}) {
+	switch o := i.(type) {
+	case int:
+		v.MulS(float64(o))
+	case float32:
+		v.MulS(float64(o))
+	case Vec2:
+		v.MulV(o)
+	default:
+		panic("Incompatible type!")
+	}
+}
+
+func (v *Vec2) MulV(o Vec2) {
+	v.X *= o.X
+	v.Y *= o.Y
+}
+
+
+func (v *Vec2) MulS(o float64) {
 	v.X *= o
 	v.Y *= o
+}
+
+func (v *Vec2) Project(o Vec2) {
+	dot := v.Dot(o)
+	v.X = (dot / (o.X*o.X + o.Y*o.Y)) * o.X
+	v.Y = (dot / (o.X*o.X + o.Y*o.Y)) * o.Y
 }
 
 func (v Vec2) Dot(o Vec2) float64 {
@@ -31,7 +58,7 @@ func (v Vec2) Cross(o Vec2) float64 {
 	return v.X*o.Y - v.Y*o.X
 }
 
-func (v Vec2) Crossf(o float64) Vec2 {
+func (v Vec2) CrossF(o float64) Vec2 {
 	return Vec2{-v.Y * o, v.X * o}
 }
 
@@ -44,16 +71,11 @@ func (v Vec2) Length() float64 {
 }
 
 func (v *Vec2) Normalize() {
-	v.Mul(1.0 / v.Length())
+	v.MulS(1.0 / v.Length())
 }
 
 func (v Vec2) Normalized() Vec2 {
 	return Scale(v, 1.0/v.Length())
-}
-
-
-func (v Vec2) Times(r float64) Vec2 {
-	return Scale(v, r)
 }
 
 func Add(v, u Vec2) Vec2 {
