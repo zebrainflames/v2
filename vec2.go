@@ -1,6 +1,7 @@
 package v2
 
 import (
+	"fmt"
 	"math"
 )
 
@@ -9,17 +10,35 @@ type Vec2 struct {
 	X,Y	float64
 }
 
+type Vec2TypeError error
 
-func (v *Vec2) Add(i interface{}) {
+// Add is a more type agnostic Add shorthand, that casts some compatible types to float64. Use specific versions whenever
+// possible. When a non-supported type is encountered, returns a specific error type alias Vec2TypeError
+func (v *Vec2) Add(i interface{}) Vec2TypeError {
 	switch o := i.(type) {
 	case Vec2:
 		v.AddV(o)
+		return nil
+	case *Vec2:
+		v.AddV(*o)
+		return nil
 	case int:
 		v.AddS(float64(o))
+		return nil
+	case int32:
+		v.AddS(float64(o))
+		return nil
+	case int64:
+		v.AddS(float64(o))
+		return nil
 	case float32:
 		v.AddS(float64(o))
+		return nil
+	case float64:
+		v.AddS(o)
+		return nil
 	default:
-		panic("Incompatible type!")
+		return fmt.Errorf("Incompatible type: %t\n", o)
 	}
 }
 
