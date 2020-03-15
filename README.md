@@ -7,4 +7,10 @@ Supports basic operations like additions, subtractions, normalizing, length calc
 Note that the receiver methods are mutative to avoid allocations. Non-mutative function options exist too. It's to be
 tested whether this offers performance benefits (or any other benefits really) in a real use case as of now.
 
-Use at your own risk, the API is very much in flux for now. Released hopefully properly versioned though.
+Use at your own risk, the API is very much in flux for now. ~~Released hopefully properly versioned though.~~ The current
+package naming scheme does not really work, should be fixed if this seems some public use.
+
+### TODO ###
+- Rename the package to something not conflicting with versioning (...)
+- Tests for basic functions
+- fuzzing & benchmarks for allocation heavy things
