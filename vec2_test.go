@@ -95,3 +95,42 @@ func TestEqualsTrue(t *testing.T) {
 	}
 }
 
+func TestMulS(t *testing.T) {
+	v := Vec2{X: 1.0, Y: -2.3}
+	s := 2.4
+	v.MulS(s)
+	e := Vec2{X: 2.4, Y: -5.52}
+	if !Equals(v, e) {
+		t.Errorf("Expected %v and got %v!", e, v)
+	}
+}
+
+func TestVec2_Normalized(t *testing.T) {
+	values := []Vec2{
+		{-15.5,64},{0,0},{88.1,-121.1},
+	}
+	expected := []Vec2{
+		{-0.23538270083995802, 0.9719027647585363}, {0,0},{0.5882908040762137, -0.8086494480548181},
+	}
+	for i,v := range values {
+		n := v.Normalized()
+		if !Equals(n, expected[i]) {
+			t.Errorf("Expected %v and got %v!", expected[i], n)
+		}
+	}
+}
+
+func TestVec2_Normalize(t *testing.T) {
+	values := []Vec2{
+		{-15.5,64},{0,0},{88.1,-121.1},
+	}
+	expected := []Vec2{
+		{-0.23538270083995802, 0.9719027647585363}, {0,0},{0.5882908040762137, -0.8086494480548181},
+	}
+	for i,v := range values {
+		v.Normalize()
+		if !Equals(v, expected[i]) {
+			t.Errorf("Expected %v and got %v!", expected[i], v)
+		}
+	}
+}

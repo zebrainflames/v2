@@ -166,17 +166,29 @@ func (v Vec2) LengthSquared() float64 {
 
 // Length returns the scalar magnitude of v. Use LengthSquared whenever possible - it's cheaper for distance checks etc.
 func (v Vec2) Length() float64 {
-	return math.Sqrt(v.X*v.X + v.Y*v.Y)
+	sum := v.X*v.X + v.Y*v.Y
+	if sum == 0.0 {
+		return sum
+	}
+	return math.Sqrt(sum)
 }
 
 // Normalize normalizes v (scales it to unit-length 1) in-place (mutates it)
 func (v *Vec2) Normalize() {
-	v.MulS(1.0 / v.Length())
+	l := v.Length()
+	if l == 0.0 {
+		return
+	}
+	v.MulS(1.0 / l)
 }
 
 // Normalized returns a normalized (unit length of 1) version of v
 func (v Vec2) Normalized() Vec2 {
-	return Scale(v, 1.0/v.Length())
+	l := v.Length()
+	if l == 0.0 {
+		return v
+	}
+	return Scale(v, 1.0/l)
 }
 
 // Add adds to Vec2s together, returns the result
