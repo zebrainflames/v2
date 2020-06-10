@@ -1,3 +1,3 @@
-module github.com/zebrainflames/v2
+module github.com/zebrainflames/vec
 
 go 1.12

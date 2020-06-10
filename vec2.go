@@ -14,7 +14,7 @@ type Vec2 struct {
 type TypeError error
 
 // Add is a more type agnostic Add shorthand, that casts some compatible types to float64. Use specific versions whenever
-// possible. When a non-supported type is encountered, returns a specific error type alias Vec2TypeError.
+// possible. When a non-supported type is encountered, returns a specific error type alias TypeError.
 // Currently supports Vec2, *Vec2, ints and floats
 func (v *Vec2) Add(i interface{}) TypeError {
 	switch o := i.(type) {
