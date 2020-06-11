@@ -16,132 +16,138 @@ type TypeError error
 // Add is a more type agnostic Add shorthand, that casts some compatible types to float64. Use specific versions whenever
 // possible. When a non-supported type is encountered, returns a specific error type alias TypeError.
 // Currently supports Vec2, *Vec2, ints and floats
-func (v *Vec2) Add(i interface{}) TypeError {
+func (v Vec2) Add(i interface{}) (Vec2, TypeError) {
 	switch o := i.(type) {
 	case Vec2:
-		v.AddV(o)
+		return v.AddV(o), nil
 	case *Vec2:
-		v.AddV(*o)
+		return v.AddV(*o), nil
 	case int:
-		v.AddS(float64(o))
+		return v.AddS(float64(o)), nil
 	case int32:
-		v.AddS(float64(o))
+		return v.AddS(float64(o)), nil
 	case int64:
-		v.AddS(float64(o))
+		return v.AddS(float64(o)), nil
 	case float32:
-		v.AddS(float64(o))
+		return v.AddS(float64(o)), nil
 	case float64:
-		v.AddS(o)
+		return v.AddS(float64(o)), nil
 	default:
-		return fmt.Errorf("Incompatible type: %t\n", o)
+		return Vec2{}, fmt.Errorf("Incompatible type: %t\n", o)
 	}
-	return nil
 }
 
-// AddV adds vec2 v component-wise to vec2 v in-place (mutates it).
-func (v *Vec2) AddV(o Vec2) {
+// AddV returns the component-wise addition of v and o.
+func (v Vec2) AddV(o Vec2) Vec2 {
 	v.X += o.X
 	v.Y += o.Y
+	return v
 }
 
 // AddS adds scalar o component-wise to vec2 v in-place (mutates it).
-func (v *Vec2) AddS(o float64) {
+func (v Vec2) AddS(o float64) Vec2 {
 	v.X += o
 	v.Y += o
+	return v
 }
 
 // Add is a more type agnostic Add shorthand, that casts some compatible types to float64. Use specific versions whenever
-// possible. When a non-supported type is encountered, returns a specific error type alias Vec2TypeError.
+// possible. When a non-supported type is encountered, returns a specific error type alias TypeError.
 // Currently supports Vec2, *Vec2, ints and floats
-func (v *Vec2) Mul(i interface{}) TypeError {
+func (v Vec2) Mul(i interface{}) (Vec2, TypeError) {
 	switch o := i.(type) {
 	case Vec2:
-		v.MulV(o)
+		return v.MulV(o), nil
 	case *Vec2:
-		v.MulV(*o)
+		return v.MulV(*o), nil
 	case int:
-		v.MulS(float64(o))
+		return v.MulS(float64(o)), nil
 	case int32:
-		v.MulS(float64(o))
+		return v.MulS(float64(o)), nil
 	case int64:
-		v.MulS(float64(o))
+		return v.MulS(float64(o)), nil
 	case float32:
-		v.MulS(float64(o))
+		return v.MulS(float64(o)), nil
 	case float64:
-		v.MulS(o)
+		return v.MulS(o), nil
 	default:
-		return fmt.Errorf("Incompatible type: %t\n", o)
+		return Vec2{}, fmt.Errorf("Incompatible type: %t\n", o)
 	}
-	return nil
 }
 
-// MulV multiplies v by vec2 o in-place (mutates it).
-func (v *Vec2) MulV(o Vec2) {
+// MulV multiplies v by vec2 o
+func (v Vec2) MulV(o Vec2) Vec2 {
 	v.X *= o.X
 	v.Y *= o.Y
+	return v
 }
 
-// MulS multiplies v by scalar o in-place (mutates it).
-func (v *Vec2) MulS(o float64) {
+// MulS multiplies v by scalar o
+func (v Vec2) MulS(o float64) Vec2 {
 	v.X *= o
 	v.Y *= o
+	return v
 }
 
-// Sub is a type agnostic substraction shorthand. Returns specific error type alias. Use typed versions when possible.
-func (v *Vec2) Sub(i interface{}) TypeError {
+// Sub is a type agnostic substraction shorthand. Returns specific result and error type alias. Use typed versions when possible.
+func (v Vec2) Sub(i interface{}) (Vec2, TypeError) {
 	switch o := i.(type) {
 	case Vec2:
-		v.SubV(o)
+		return v.SubV(o), nil
 	case int:
-		v.SubS(float64(o))
+		return v.SubS(float64(o)), nil
 	case float32:
-		v.SubS(float64(o))
+		return v.SubS(float64(o)), nil
 	default:
-		return fmt.Errorf("Incompatible type: %t\n", o)
+		return Vec2{}, fmt.Errorf("Incompatible type: %t\n", o)
 	}
-	return nil
 }
 
-func (v *Vec2) SubV(o Vec2) {
+func (v Vec2) SubV(o Vec2) Vec2 {
 	v.X -= o.X
 	v.Y -= o.Y
+	return v
 }
 
-func (v *Vec2) SubS(o float64) {
+func (v Vec2) SubS(o float64) Vec2 {
 	v.X -= o
 	v.Y -= o
+	return v
 }
 
-func (v *Vec2) Div(i interface{}) {
+func (v Vec2) Div(i interface{}) (Vec2, TypeError) {
 	switch o := i.(type) {
 	case Vec2:
-		v.DivV(o)
+		return v.DivV(o), nil
 	case int:
-		v.DivS(float64(o))
+		return v.DivS(float64(o)), nil
 	case float32:
-		v.DivS(float64(o))
+		return v.DivS(float64(o)), nil
 	default:
-		panic("Incompatible type!")
+		return Vec2{}, fmt.Errorf("Incompatible type: %t\n", o)
 	}
 }
 
-// DivV divides v component-wise by vec2 o
-func (v *Vec2) DivV(o Vec2) {
+// DivV divides v component-wise by vec2 o, returns result
+func (v Vec2) DivV(o Vec2) Vec2 {
 	v.X /= o.X
 	v.Y /= o.Y
+	return v
 }
 
-// DivS divides v component-wise by scalar o (mutates it in place)
-func (v *Vec2) DivS(o float64) {
+// DivS divides v component-wise by scalar o, returns result
+func (v Vec2) DivS(o float64) Vec2 {
 	v.X /= o
 	v.Y /= o
+	return v
 }
 
 // Project projects vector v to axis o
-func (v *Vec2) Project(o Vec2) {
+func (v Vec2) Project(o Vec2) Vec2 {
 	dot := v.Dot(o)
 	v.X = (dot / (o.X*o.X + o.Y*o.Y)) * o.X
 	v.Y = (dot / (o.X*o.X + o.Y*o.Y)) * o.Y
+	return v
 }
 
 // Dot returns the dot product for v and o
@@ -175,11 +181,7 @@ func (v Vec2) Length() float64 {
 
 // Normalize normalizes v (scales it to unit-length 1) in-place (mutates it)
 func (v *Vec2) Normalize() {
-	l := v.Length()
-	if l == 0.0 {
-		return
-	}
-	v.MulS(1.0 / l)
+	*v = v.Normalized()
 }
 
 // Normalized returns a normalized (unit length of 1) version of v
@@ -215,6 +217,10 @@ func Mul(v, o Vec2) Vec2 {
 		X: v.X * o.X,
 		Y: v.Y * o.Y,
 	}
+}
+
+func (v Vec2) Scale(r float64) Vec2 {
+	return Scale(v, r)
 }
 
 // Scale multiplies v by scalar r (component-wise)
